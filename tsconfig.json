@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "target": "ES5",
+    "module": "ES2015",
+
+    "declaration": true,
+    "sourceMap": false,
+    "outDir": "dist/esm",
+    "esModuleInterop": true,
+    "moduleResolution": "node",
+
+    "strict": true,
+    "noImplicitAny": true,
+    "removeComments": false,
+    /* Advanced Options */
+    "skipLibCheck": false,
+    "forceConsistentCasingInFileNames": true,
+
+    "types": ["node"],
+  }
+}

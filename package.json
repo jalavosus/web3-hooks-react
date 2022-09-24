@@ -1,0 +1,36 @@
+{
+  "name": "@jalavosus/web3-hooks-react",
+  "version": "0.1.0",
+  "description": "React Hooks for various Web3 functions and contract interactions.",
+  "main": "dist/cjs/index.js",
+  "module": "dist/esm/index.js",
+  "repository": "https://github.com/jalavosus/web3-hooks-react",
+  "author": "jalavosus",
+  "license": "MIT",
+  "private": false,
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "setup": "yarn install && yarn generate:abis",
+    "prepublishOnly": "yarn generate:abis && yarn build && yarn build:esm",
+    "build": "rm -rf dist/cjs && tsc --module CommonJS --outDir dist/cjs",
+    "build:esm": "rm -rf dist/esm && tsc",
+    "generate:abis": "typechain --target=ethers-v5 abis/*.abi.json --out-dir src/generated"
+  },
+  "devDependencies": {
+    "@typechain/ethers-v5": "^10.1.0",
+    "@types/node": "^18.7.20",
+    "@types/react": "^18.0.21",
+    "parcel": "^2.7.0",
+    "react": "^18.2.0",
+    "typechain": "^8.1.0",
+    "typescript": "^4.8.3"
+  },
+  "dependencies": {
+    "ethers": "^5.7.1"
+  },
+  "peerDependencies": {
+    "react": "^18.2.0"
+  }
+}
