@@ -12,23 +12,7 @@ import {ERC20Abi, ERC20Abi__factory} from "./generated";
 
 import {asError} from "./helpers";
 
-/**
- * Parameters which are passed to various ERC20 hooks.
- *
- * @interface useERC20Params
- */
-export interface useERC20Params {
-	/**
-	 * can be any of:
-	 *  - window.ethereum
-	 *  - an "ethereum" object returned by something like useMetamask
-	 *  - an object implementing the ethersjs Provider interface (such as JsonRpcProvider or Web3Provider)
-	 *  - an object implementing the ethersjs Signer interface.
-	 */
-	ethereum: any | Provider | Signer;
-	/** Contract address of the ERC20-implementing contract. */
-	contractAddress: string;
-}
+import {UseContractParams} from "./common";
 
 /**
  * Returned by {@link useERC20}, contains all functions of the ERC20 abi. Can be destructured based on desired use.
@@ -60,11 +44,11 @@ export type TransactionResult = {
 
 /**
  *
- * @param {useERC20Params} params - ERC20 contract address and some sort of ethereum instance.
+ * @param {UseContractParams} params - ERC20 contract address and some sort of ethereum instance.
  *
  * @returns {ERC20} An object containing ERC20 contract functions.
  */
-export function useERC20(params: useERC20Params): ERC20 {
+export function useERC20(params: UseContractParams): ERC20 {
 	const connect = (e: any | Signer | Provider, addr: string): ERC20Abi => ERC20Abi__factory.connect(addr, e);
 
 	const [contract, setContract] = useState<ERC20Abi>(connect(params.ethereum, params.contractAddress));
@@ -82,7 +66,7 @@ export function useERC20(params: useERC20Params): ERC20 {
 	} as const
 }
 
-function useContract(params: useERC20Params) {
+function useContract(params: UseContractParams) {
 	const contract = useERC20(params);
 	const [txn, setTxn] = useState<TransactionResult>();
 
@@ -97,13 +81,13 @@ function useContract(params: useERC20Params) {
  * along with the result.
  *
  * @param params - contract address and some form of ethereum instance.
- * @see {@link useERC20Params} for more details on params.
+ * @see {@link UseContractParams} for more details on params.
  *
  * @returns Const array containing (in order):
  * 	- `function(spender: string, amount: BigNumberish) => void`
  * 	- {@link TransactionResult}
  */
-export function useApprove(params: useERC20Params) {
+export function useApprove(params: UseContractParams) {
 	const [{contract, setResult, setErr}, txn] = useContract(params);
 
 	const fn = (spender: string, amount: BigNumberish) =>
@@ -119,13 +103,13 @@ export function useApprove(params: useERC20Params) {
  * along with the result.
  *
  * @param params - contract address and some form of ethereum instance.
- * @see {@link useERC20Params} for more details on params.
+ * @see {@link UseContractParams} for more details on params.
  *
  * @returns Const array containing (in order):
  * 	- `function(to: string, amount: BigNumberish) => void`
  * 	- {@link TransactionResult}
  */
-export function useTransfer(params: useERC20Params) {
+export function useTransfer(params: UseContractParams) {
 	const [{contract, setResult, setErr}, txn] = useContract(params);
 
 	const fn = (to: string, amount: BigNumberish) =>
@@ -141,13 +125,13 @@ export function useTransfer(params: useERC20Params) {
  * along with the result.
  *
  * @param params - contract address and some form of ethereum instance.
- * @see {@link useERC20Params} for more details on params.
+ * @see {@link UseContractParams} for more details on params.
  *
  * @returns Const array containing (in order):
  * 	- `function(from: string, to: string, amount: BigNumberish) => void`
  * 	- {@link TransactionResult}
  */
-export function useTransferFrom(params: useERC20Params) {
+export function useTransferFrom(params: UseContractParams) {
 	const [{contract, setResult, setErr}, txn] = useContract(params);
 
 	const fn = (from: string, to: string, amount: BigNumberish) =>
